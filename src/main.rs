@@ -4,6 +4,7 @@ extern crate piston_window;
 mod draw;
 mod snake;
 mod game;
+mod food;
 
 use piston_window::*;
 use piston_window::types::Color;

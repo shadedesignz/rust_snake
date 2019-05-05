@@ -49,12 +49,9 @@ impl Game {
             return;
         }
 
-        match key {
-            Key::P => {
-                self.game_paused = !self.game_paused;
-                return;
-            },
-            _ => {},
+        if key == Key::P {
+            self.game_paused = !self.game_paused;
+            return;
         }
 
         let dir = match key {

@@ -9,6 +9,7 @@ use crate::draw::{draw_block, draw_rectange};
 const FOOD_COLOR: Color = [0.80, 0.00, 0.00, 1.0];
 const BORDER_COLOR: Color = [0.00, 0.00, 0.00, 1.0];
 const GAMEOVER_COLOR: Color = [0.90, 0.00, 0.00, 0.5];
+const GAMEPAUSE_COLOR: Color = [0.00, 0.00, 0.00, 0.5];
 
 const MOVING_PERIOD: f64 = 0.15;
 const RESTART_TIME: f64 = 1.0;
@@ -24,6 +25,7 @@ pub struct Game {
     height: i32,
 
     game_over: bool,
+    game_paused: bool,
     waiting_time: f64,
 }
 
@@ -38,12 +40,21 @@ impl Game {
             width,
             height,
             game_over: false,
+            game_paused: false,
         }
     }
 
     pub fn key_pressed(&mut self, key: Key) {
         if self.game_over {
             return;
+        }
+
+        match key {
+            Key::P => {
+                self.game_paused = !self.game_paused;
+                return;
+            },
+            _ => {},
         }
 
         let dir = match key {
@@ -76,6 +87,10 @@ impl Game {
         if self.game_over {
             draw_rectange(GAMEOVER_COLOR, 0, 0, self.width, self.height, con, g);
         }
+
+        if self.game_paused {
+            draw_rectange(GAMEPAUSE_COLOR, 0, 0, self.width, self.height, con, g);
+        }
     }
 
     pub fn update(&mut self, delta_time: f64) {
@@ -92,7 +107,7 @@ impl Game {
             self.add_food();
         }
 
-        if self.waiting_time > MOVING_PERIOD {
+        if self.waiting_time > MOVING_PERIOD && !self.game_paused {
             self.update_snake(None);
         }
     }

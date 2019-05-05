@@ -81,11 +81,11 @@ impl Game {
         );
 
         if self.game_over {
-            draw_rectange(GAMEOVER_COLOR, 0, 0, self.width, self.height, con, g);
+            self.draw_overlay(GAMEOVER_COLOR, con, g);
         }
 
         if self.game_paused {
-            draw_rectange(GAMEPAUSE_COLOR, 0, 0, self.width, self.height, con, g);
+            self.draw_overlay(GAMEPAUSE_COLOR, con, g);
         }
     }
 
@@ -143,5 +143,9 @@ impl Game {
         self.food_exists = true;
         self.food = Food::new(6, 4);
         self.game_over = false;
+    }
+
+    fn draw_overlay(&self, color: Color, con: &Context, g: &mut G2d) {
+        draw_rectange(color, 0, 0, self.width, self.height, con, g);
     }
 }

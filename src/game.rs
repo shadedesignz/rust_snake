@@ -4,7 +4,7 @@ use piston_window::types::Color;
 use rand::{thread_rng, Rng};
 
 use crate::snake::{Direction, Snake};
-use crate::draw::{draw_block, draw_rectange};
+use crate::draw::{draw_block, draw_rectange, to_coord, BLOCK_SIZE};
 
 const FOOD_COLOR: Color = [0.80, 0.00, 0.00, 1.0];
 const BORDER_COLOR: Color = [0.00, 0.00, 0.00, 1.0];
@@ -79,10 +79,13 @@ impl Game {
             draw_block(FOOD_COLOR, self.food_x, self.food_y, con, g);
         }
 
-        draw_rectange(BORDER_COLOR, 0, 0, self.width, 1, con, g);
-        draw_rectange(BORDER_COLOR, 0, self.height - 1, self.width, 1, con, g);
-        draw_rectange(BORDER_COLOR, 0, 0, 1, self.height, con, g);
-        draw_rectange(BORDER_COLOR, self.width - 1, 0, 1, self.height, con, g);
+        let border = rectangle::Rectangle::new_border(BORDER_COLOR, BLOCK_SIZE);
+        border.draw(
+            [0.0, 0.0, to_coord(self.width), to_coord(self.height)],
+            &draw_state::DrawState::default(),
+            con.transform,
+            g 
+        );
 
         if self.game_over {
             draw_rectange(GAMEOVER_COLOR, 0, 0, self.width, self.height, con, g);
